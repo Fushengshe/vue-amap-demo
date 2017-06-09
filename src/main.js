@@ -3,9 +3,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
+import AMap, { lazyAMapApiLoaderInstance } from 'vue-amap'
 Vue.config.productionTip = false
-import AMap from 'vue-amap'
 
 Vue.use(AMap)
 AMap.initAMapApiLoader({
@@ -20,6 +19,12 @@ AMap.initAMapApiLoader({
     'AMap.PolyEditor',
     'AMap.CircleEditor'
   ]
+})
+lazyAMapApiLoaderInstance.load().then(() => {
+  // your code ...
+  this.map = new AMap.Map('amapContainer', {
+    center: new AMap.LngLat(121.59996, 31.197646)
+  })
 })
 
 /* eslint-disable no-new */

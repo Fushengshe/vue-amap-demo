@@ -2,7 +2,8 @@
     <div class="map">
       <h3 class="title">{{ msg }}</h3>
       <div class="amap-wrapper">
-        <el-amap :vid="'amap-vues'"></el-amap>
+        <!-- 注意：vid不要重复 -->
+        <el-amap :vid="'amap-vue'"></el-amap>
       </div>
     </div>
 </template>
