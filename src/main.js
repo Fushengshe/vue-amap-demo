@@ -3,12 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import { Button, Select } from 'element-ui'
+import { Button, Select, Message } from 'element-ui'
 import AMap from 'vue-amap'
 Vue.config.productionTip = false
 Vue.use(AMap)
 Vue.use(Button)
 Vue.use(Select)
+Vue.use(Message)
 AMap.initAMapApiLoader({
   key: 'your amap key',
   plugin: [

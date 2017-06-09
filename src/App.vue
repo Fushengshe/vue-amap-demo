@@ -31,7 +31,7 @@
     color #2c3e50
     margin-top 60px
     .amap-wrapper {
-      width 500px
+      /*width 500px*/
       height 500px
       margin 0 auto
     }

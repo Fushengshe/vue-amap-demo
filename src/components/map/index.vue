@@ -1,18 +1,47 @@
 <template>
   <div class="map">
-    <h3 class="title">{{ msg }}</h3>
+    <!--<h3 class="title">{{ msg }}</h3>-->
     <div class="amap-wrapper">
       <el-amap
         :vid="'amap-vue'"
         :map-manager="amapManager"
         :center="center"
         :zoom="zoom"
-        :plugin="plugin"
-        :events="events"
         class="amap-demo">
+        <el-amap-marker
+          v-for="marker in markers"
+          :position="marker.position"
+          :event="marker.events"
+          :visible="marker.visible"
+          :draggable="marker.draggable"
+        ></el-amap-marker>
       </el-amap>
       <div class="toolbar">
-        <el-button class="toolbar-button" @click="getMap()">get map</el-button>
+        <el-button
+          class="toolbar-button"
+          @click="toggleVisible">
+          toggle first marker
+        </el-button>
+        <el-button
+          class="toolbar-button"
+          @click="changePosition">
+          change position
+        </el-button>
+        <el-button
+          class="toolbar-button"
+          @click="changeDraggle">
+          change draggle
+        </el-button>
+        <el-button
+          class="toolbar-button"
+          @click="addMarker">
+          add marker
+        </el-button>
+        <el-button
+          class="toolbar-button"
+          @click="removeMarker">
+          remove marker
+        </el-button>
       </div>
     </div>
   </div>
@@ -22,39 +51,51 @@
   import VueAMap from 'vue-amap'
   let amapManager = new VueAMap.AMapManager()
   export default {
+    name: 'amap-page',
     data () {
       return {
         amapManager,
-        zoom: 12,
-        center: [121.59996, 31.197646],
-        events: {
-          'moveend': () => {
-          },
-          'zoomchage': () => {
-          },
-          'click': (e) => {
-            console.log(e)
-            alert('map clicked')
-          }
-        },
-        'plugin': [
-          'ToolBar', {
-            pName: 'MapType',
-            defaultType: 0,
+        zoom: 14,
+        center: [121.5273285, 31.21515044],
+        markers: [
+          {
+            position: [121.5273285, 31.21515044],
             events: {
-              init (o) {
-                console.log(o)
+              click: () => {
+                alert('your click me')
+              },
+              dragend: (e) => {
+                this.markers[0].position = [e.lnglat.lng, e.lnglat.lat]
               }
-            }
+            },
+            visible: true,
+            draggable: false
           }
-        ],
-        msg: 'this is the map components based on vue-amap'
+        ]
       }
     },
     methods: {
-      getMap () {
-        console.log(amapManager._componentMap)
-        console.log(amapManager._map)
+      changePosition () {
+        let position = this.markers[0].position
+        this.markers[0].position = [position[0] + 0.002, position[1] - 0.002]
+      },
+      changeDraggle () {
+        let draggable = this.markers[0].draggable
+        this.markers[0].draggable = !draggable
+      },
+      toggleVisible () {
+        let visibleVar = this.markers[0].visible
+        this.markers[0].visible = !visibleVar
+      },
+      addMarker () {
+        let marker = {
+          position: [121.5273285 + (Math.random() - 0.5) * 0.02, 31.21515044 + (Math.random() - 0.5) * 0.02]
+        }
+        this.markers.push(marker)
+      },
+      removeMarker () {
+        if (!this.markers.length) return
+        this.markers.splice(this.markers.length - 1, 1)
       }
     }
   }
