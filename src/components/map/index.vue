@@ -34,6 +34,7 @@
           change draggle
         </el-button>
         <el-button
+          type="primary"
           class="toolbar-button"
           @click="addMarker">
           add marker

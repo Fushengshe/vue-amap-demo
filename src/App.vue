@@ -1,14 +1,13 @@
 <template>
   <div id="app">
-    <router-link to="map"><el-button>map</el-button></router-link>
-    <router-link to="hello"><el-button>hello</el-button></router-link>
+    <router-link to="map"><el-button type="primary">map</el-button></router-link>
+    <router-link to="hello"><el-button type="ghost">hello</el-button></router-link>
     <router-view></router-view>
     <!--<amap></amap>-->
   </div>
 </template>
 
 <script>
-  import ElButton from '../node_modules/element-ui/packages/button/src/button'
 //  import amap from './components/map'
   export default {
     name: 'app',
@@ -18,7 +17,6 @@
       }
     },
     components: {
-      ElButton
 //      amap
     }
   }
