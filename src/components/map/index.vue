@@ -18,6 +18,7 @@
         ></el-amap-marker>
         <el-amap-circle
           v-for="(circle, index) in circles"
+          :index="index"
           :center="circle.center"
           :radius="circle.radius"
           :fill0pacity="circle.fill0pacity"
