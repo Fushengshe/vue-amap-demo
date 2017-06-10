@@ -1,6 +1,6 @@
 <template>
   <div class="map">
-    <!--<h3 class="title">{{ msg }}</h3>-->
+    <h3 class="title">{{ msg }}</h3>
     <div class="amap-wrapper">
       <el-amap
         :vid="'amap-vue'"
@@ -10,6 +10,7 @@
         class="amap-demo">
         <el-amap-marker
           v-for="marker in markers"
+          :key="marker.index"
           :position="marker.position"
           :event="marker.events"
           :visible="marker.visible"
@@ -54,6 +55,7 @@
     name: 'amap-page',
     data () {
       return {
+        msg: 'vue-amap say hello',
         amapManager,
         zoom: 14,
         center: [121.5273285, 31.21515044],
@@ -105,7 +107,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .amap-wrapper {
     .amap-demo {
-      height 300px
+      height 700px
       border 1px #333 solid
     }
   }
