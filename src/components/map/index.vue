@@ -22,8 +22,7 @@
   /** 注意在这里需要引入 AMap，这一点和官方给的文档不是很一样
    * 应该是因为es-lint的原因，会在events中显示AMap未定义
    */
-  import AMap from 'vue-amap'
-  /* eslint-disable no-duplicate-imports */
+
   import VueAMap from 'vue-amap'
   let amapManager = new VueAMap.AMapManager()
   export default{
@@ -34,6 +33,7 @@
         amapManager,
         events: {
           init (o) {
+            /* eslint-disable no-undef */
             let marker = new AMap.Marker({
               position: [121.59996, 31.197646]
             })
