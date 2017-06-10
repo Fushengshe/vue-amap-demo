@@ -26,12 +26,9 @@
         zoom: 14,
         center: [121.5273285, 31.21515044],
         plugins: [{
-          pName: 'AMap.MapType',
-          defaultType: 0,
-          // 显示交通
-          showTraffic: false,
-          // 显示路网
-          showRoad: false,
+          pName: 'AMap.OverView',
+          isOpen: true,
+          visible: true,
           events: {
             init (instance) {
               console.log(instance)
