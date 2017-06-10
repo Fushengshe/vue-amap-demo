@@ -15,7 +15,17 @@
           :event="marker.events"
           :visible="marker.visible"
           :draggable="marker.draggable"
-        ></el-amap-marker>
+        >
+        </el-amap-marker>
+        <el-amap-info-window
+          v-for="(window, index) in windows"
+          :index="index"
+          :position="window.position"
+          :content="window.content"
+          :visible="window.visible"
+          :events="window.events"
+        >
+        </el-amap-info-window>
       </el-amap>
       <div class="toolbar">
         <el-button
@@ -51,8 +61,10 @@
 
 <script type="text/ecmascript-6">
   import VueAMap from 'vue-amap'
+  import ElAmapInfoWindow from '../../../node_modules/vue-amap/src/lib/components/amap-info-window'
   let amapManager = new VueAMap.AMapManager()
   export default {
+    components: {ElAmapInfoWindow},
     name: 'amap-page',
     data () {
       return {
@@ -70,11 +82,23 @@
               dragend: (e) => {
                 // 使用es6中额解构赋值
                 const {lng, lat} = e.target.getPosition()
-                this.markers[0].position = [lng,lat]
+                this.markers[0].position = [lng, lat]
               }
             },
             visible: true,
             draggable: false
+          }
+        ],
+        windows: [
+          {
+            position: [121.5273285, 31.21515044],
+            content: 'hello world',
+            visible: true,
+            events: {
+              close () {
+                console.log('close info window')
+              }
+            }
           }
         ]
       }
