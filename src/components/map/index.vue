@@ -16,14 +16,12 @@
           :visible="marker.visible"
           :draggable="marker.draggable"
         ></el-amap-marker>
-        <el-amap-circle
-          v-for="(circle, index) in circles"
-          :center="circle.center"
-          :radius="circle.radius"
-          :fill0pacity="circle.fill0pacity"
-          :events="circle.events"
-        >
-        </el-amap-circle>
+        <el-amap-polygon
+          v-for="(polygon, index) in polygons"
+          :index="index"
+          :path="polygon.path"
+          :events="polygon.events"
+        ></el-amap-polygon>
       </el-amap>
       <div class="toolbar">
         <el-button
@@ -59,10 +57,8 @@
 
 <script type="text/ecmascript-6">
   import VueAMap from 'vue-amap'
-  import ElAmapCircle from '../../../node_modules/vue-amap/src/lib/components/amap-circle'
   let amapManager = new VueAMap.AMapManager()
   export default {
-    components: {ElAmapCircle},
     name: 'amap-page',
     data () {
       return {
@@ -87,14 +83,12 @@
             draggable: false
           }
         ],
-        circles: [
+        polygons: [
           {
-            center: [121.5273285, 31.21515044],
-            radius: 200,
-            fill0pacity: 0.3,
+            path: [[121.5273285, 31.21515044], [121.5293285, 31.21515044], [121.5293285, 31.21915044], [121.5273285, 31.21515044]],
             events: {
               click: () => {
-                alert('your  click the circle')
+                alert('your click the polygon')
               }
             }
           }
