@@ -16,6 +16,14 @@
           :visible="marker.visible"
           :draggable="marker.draggable"
         ></el-amap-marker>
+        <el-amap-circle
+          v-for="(circle, index) in circles"
+          :center="circle.center"
+          :radius="circle.radius"
+          :fill0pacity="circle.fill0pacity"
+          :events="circle.events"
+        >
+        </el-amap-circle>
       </el-amap>
       <div class="toolbar">
         <el-button
@@ -51,8 +59,10 @@
 
 <script type="text/ecmascript-6">
   import VueAMap from 'vue-amap'
+  import ElAmapCircle from '../../../node_modules/vue-amap/src/lib/components/amap-circle'
   let amapManager = new VueAMap.AMapManager()
   export default {
+    components: {ElAmapCircle},
     name: 'amap-page',
     data () {
       return {
@@ -70,11 +80,23 @@
               dragend: (e) => {
                 // 使用es6中额解构赋值
                 const {lng, lat} = e.target.getPosition()
-                this.markers[0].position = [lng,lat]
+                this.markers[0].position = [lng, lat]
               }
             },
             visible: true,
             draggable: false
+          }
+        ],
+        circles: [
+          {
+            center: [121.5273285, 31.21515044],
+            radius: 200,
+            fill0pacity: 0.3,
+            events: {
+              click: () => {
+                alert('your  click the circle')
+              }
+            }
           }
         ]
       }
