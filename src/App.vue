@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <a href="https://elemefe.github.io/vue-amap/#/"><el-button>vue-amap开发文档</el-button></a>
     <router-link to="map"><el-button type="primary">map</el-button></router-link>
     <router-link to="hello"><el-button type="ghost">hello</el-button></router-link>
     <router-view></router-view>
@@ -8,6 +9,7 @@
 </template>
 
 <script>
+  import ElButton from '../node_modules/element-ui/packages/button/src/button'
 //  import amap from './components/map'
   export default {
     name: 'app',
@@ -17,6 +19,7 @@
       }
     },
     components: {
+      ElButton
 //      amap
     }
   }
@@ -32,7 +35,7 @@
     margin-top 60px
     .amap-wrapper {
       /*width 500px*/
-      height 500px
+      /*height 500px*/
       margin 0 auto
     }
 
