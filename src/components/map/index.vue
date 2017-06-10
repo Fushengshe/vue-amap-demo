@@ -9,8 +9,8 @@
         :zoom="zoom"
         class="amap-demo">
         <el-amap-marker
-          v-for="marker in markers"
-          :key="marker.index"
+          v-for="(marker, index) in markers"
+          :key="index"
           :position="marker.position"
           :event="marker.events"
           :visible="marker.visible"
@@ -68,7 +68,9 @@
                 alert('your click me')
               },
               dragend: (e) => {
-                this.markers[0].position = [e.lnglat.lng, e.lnglat.lat]
+                // 使用es6中额解构赋值
+                const {lng, lat} = e.target.getPosition()
+                this.markers[0].position = [lng,lat]
               }
             },
             visible: true,
