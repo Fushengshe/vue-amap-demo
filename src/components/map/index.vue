@@ -3,7 +3,7 @@
     <h3 class="title">{{ msg }}</h3>
     <div class="amap-wrapper">
       <el-amap
-        :vid="'amap-vue'"
+        vid="amap-vue"
         :center="center"
         :zoom="zoom"
         class="amap-demo">
@@ -22,14 +22,18 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import VueAMap from 'vue-amap'
+  let amapManager = new VueAMap.AMapManager()
+  const POLYGON_ID = 'POLYGON_ID'
   export default {
-    name: 'amap-page',
     data () {
       return {
         msg: 'vue-amap say hello',
         zoom: 12,
+        amapManager: amapManager,
         center: [121.5273285, 31.21515044],
         polyline: {
+          vid: POLYGON_ID,
           path: [[121.5389385, 31.21515044], [121.5389385, 31.29615044], [121.5273285, 31.21515044]],
           events: {
             click (e) {
@@ -39,9 +43,9 @@
             end: (e) => {
               let newPath = e.target.getPath().map(point => [point.lng, point.lat])
               console.log(newPath)
-            },
-            editable: false
-          }
+            }
+          },
+          editable: true
         }
       }
     },
