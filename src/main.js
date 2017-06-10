@@ -11,7 +11,7 @@ Vue.use(Button)
 Vue.use(Select)
 Vue.use(Message)
 AMap.initAMapApiLoader({
-  key: 'your amap key',
+  key: 'c3a240c713e5a71dfacf5d746c78ffa8',
   plugin: [
     'AMap.Autocomplete',
     'AMap.PlaceSearch',

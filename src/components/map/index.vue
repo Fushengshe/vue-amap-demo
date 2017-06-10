@@ -2,49 +2,23 @@
   <div class="map">
     <h3 class="title">{{ msg }}</h3>
     <div class="amap-wrapper">
+      <el-amap-search-box
+        class="search-box"
+        :search-option="searchOption"
+        :on-search-result="onSearchResult"
+      ></el-amap-search-box>
       <el-amap
         :vid="'amap-vue'"
         :map-manager="amapManager"
-        :center="center"
+        :center="mapCenter"
         :zoom="zoom"
         class="amap-demo">
         <el-amap-marker
           v-for="(marker, index) in markers"
           :key="index"
-          :position="marker.position"
-          :event="marker.events"
-          :visible="marker.visible"
-          :draggable="marker.draggable"
+          :position="marker"
         ></el-amap-marker>
       </el-amap>
-      <div class="toolbar">
-        <el-button
-          class="toolbar-button"
-          @click="toggleVisible">
-          toggle first marker
-        </el-button>
-        <el-button
-          class="toolbar-button"
-          @click="changePosition">
-          change position
-        </el-button>
-        <el-button
-          class="toolbar-button"
-          @click="changeDraggle">
-          change draggle
-        </el-button>
-        <el-button
-          type="primary"
-          class="toolbar-button"
-          @click="addMarker">
-          add marker
-        </el-button>
-        <el-button
-          class="toolbar-button"
-          @click="removeMarker">
-          remove marker
-        </el-button>
-      </div>
     </div>
   </div>
 </template>
@@ -58,49 +32,42 @@
       return {
         msg: 'vue-amap say hello',
         amapManager,
-        zoom: 14,
-        center: [121.5273285, 31.21515044],
+        zoom: 12,
+        mapCenter: [121.59996, 31.197646],
         markers: [
-          {
-            position: [121.5273285, 31.21515044],
-            events: {
-              click: () => {
-                alert('your click me')
-              },
-              dragend: (e) => {
-                // 使用es6中额解构赋值
-                const {lng, lat} = e.target.getPosition()
-                this.markers[0].position = [lng,lat]
-              }
-            },
-            visible: true,
-            draggable: false
-          }
-        ]
+          [121.59996, 31.197646],
+          [121.40018, 31.197622],
+          [121.69991, 31.207649]
+        ],
+        searchOption: {
+          city: '上海',
+          citylimit: true
+        }
       }
     },
     methods: {
-      changePosition () {
-        let position = this.markers[0].position
-        this.markers[0].position = [position[0] + 0.002, position[1] - 0.002]
-      },
-      changeDraggle () {
-        let draggable = this.markers[0].draggable
-        this.markers[0].draggable = !draggable
-      },
-      toggleVisible () {
-        let visibleVar = this.markers[0].visible
-        this.markers[0].visible = !visibleVar
-      },
       addMarker () {
-        let marker = {
-          position: [121.5273285 + (Math.random() - 0.5) * 0.02, 31.21515044 + (Math.random() - 0.5) * 0.02]
-        }
-        this.markers.push(marker)
+        let lng = 121.5 + Math.round(Math.random() * 1000) / 10000
+        let lat = 31.197646 + Math.round(Math.random() * 500) / 10000
+        this.markers.push([lng, lat])
       },
-      removeMarker () {
-        if (!this.markers.length) return
-        this.markers.splice(this.markers.length - 1, 1)
+      onSearchResult (pois) {
+//        /* eslint-disable no-unused-vars */
+        let latSum = 0
+        let lngSum = 0
+        if (pois.length > 0) {
+          pois.forEach(poi => {
+            let {lng, lat} = poi
+            lngSum += lng
+            latSum += lat
+            this.markers.push([poi.lng, poi.lat])
+          })
+          let center = {
+            lng: lngSum / pois.length,
+            lat: latSum / pois.length
+          }
+          this.mapCenter = [center.lng, center.lat]
+        }
       }
     }
   }
@@ -109,6 +76,13 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .amap-wrapper {
+    position relative
+    .search-box {
+      position absolute
+      top 25px
+      left 20px
+      border-radius 5px
+    }
     .amap-demo {
       height 700px
       border 1px #333 solid
