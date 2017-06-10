@@ -7,6 +7,7 @@
         :map-manager="amapManager"
         :center="center"
         :zoom="zoom"
+        :events="events"
         class="amap-demo">
         <el-amap-marker
           v-for="(marker, index) in markers"
@@ -45,20 +46,27 @@
           remove marker
         </el-button>
       </div>
+      <div class="geocoder-bar">
+        position: [{{lng}},{{lat}}] address: {{address}}
+      </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  /* eslint-disable no-duplicate-imports */
   import VueAMap from 'vue-amap'
   let amapManager = new VueAMap.AMapManager()
   export default {
     name: 'amap-page',
     data () {
+      let self = this
       return {
         msg: 'vue-amap say hello',
         amapManager,
-        zoom: 14,
+        zoom: 12,
+        lat: '',
+        lng: '',
         center: [121.5273285, 31.21515044],
         markers: [
           {
@@ -70,13 +78,37 @@
               dragend: (e) => {
                 // 使用es6中额解构赋值
                 const {lng, lat} = e.target.getPosition()
-                this.markers[0].position = [lng,lat]
+                this.markers[0].position = [lng, lat]
               }
             },
             visible: true,
             draggable: false
           }
-        ]
+        ],
+        address: '',
+        events: {
+          click (e) {
+            let {lng, lat} = e.lnglat
+            self.lng = lng
+            self.lat = lat
+            // 这里用高德 SDK 完成
+            /* eslint-disable no-undef */
+            let geocoder = new AMap.Geocoder({
+              radius: 1000,
+              extensions: 'all'
+            })
+            geocoder.getAddress([lng, lat], function (status, result) {
+              console.log(status)
+              console.log(result)
+              if (status === 'complete' && result.info === 'OK') {
+                if (result && result.regeocode) {
+                  self.address = result.regeocode.formattedAddress
+                  self.$nextTick()
+                }
+              }
+            })
+          }
+        }
       }
     },
     methods: {
@@ -110,7 +142,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .amap-wrapper {
     .amap-demo {
-      height 700px
+      height 500px
       border 1px #333 solid
     }
   }
