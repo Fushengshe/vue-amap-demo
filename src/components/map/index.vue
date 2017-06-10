@@ -20,21 +20,19 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import ElAmapGroundImage from '../../../node_modules/vue-amap/src/lib/components/amap-ground-image'
   export default {
-    components: {ElAmapGroundImage},
     name: 'amap-page',
     data () {
       return {
         msg: 'vue-amap say hello',
-        zoom: 14,
+        zoom: 7,
         center: [121.5273285, 31.21515044],
         groundimages: [
           {
             url: '//faas.elemecdn.com/desktop/media/img/appqc.95e532.png',
             bounds: [[121.5273285, 31.21515044], [122.9273285, 32.31515044]],
             events: {
-              click () {
+              click: () => {
                 alert('click groundimage')
               }
             }
