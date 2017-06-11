@@ -2,12 +2,19 @@
   <div class="map">
     <h3 class="title">{{ msg }}</h3>
     <div class="amap-wrapper">
+      <el-amap-search-box
+        class="amap-search-box"
+        :search-option="searchOption"
+        :on-search-result="onSearchResult"
+      >
+      </el-amap-search-box>
       <el-amap
         :vid="'amap-vue'"
         :map-manager="amapManager"
         :center="center"
         :zoom="zoom"
         :events="events"
+        :plugin="plugins"
         class="amap-demo">
         <el-amap-marker
           v-for="(marker, index) in markers"
@@ -19,9 +26,11 @@
         ></el-amap-marker>
         <el-amap-info-window
           v-for="(window, index) in windows"
+          :index="index"
           :position="window.position"
           :visible="window.visible"
           :content="window.content"
+          :events="window.events"
         ></el-amap-info-window>
       </el-amap>
       <div class="toolbar">
@@ -64,7 +73,6 @@
   import VueAMap from 'vue-amap'
   let amapManager = new VueAMap.AMapManager()
   export default {
-
     name: 'amap-page',
     data () {
       let self = this
@@ -74,7 +82,6 @@
         zoom: 14,
         lat: '',
         lng: '',
-//        center: [121.5273285, 31.21515044],
         center: [119.547204, 39.919205],
         markers: [
           {
@@ -101,6 +108,38 @@
           }
         ],
         address: '',
+        plugins: [
+          {
+            pName: 'AMap.OverView',
+            events: {
+              init (instance) {
+                console.log(instance)
+              }
+            }
+          }, {
+            pName: 'AMap.Scale',
+            events: {
+              init (instance) {
+                console.log(instance)
+              }
+            }
+          }, {
+            pName: 'AMap.ToolBar',
+            events: {
+              init (instance) {
+                console.log(instance)
+              }
+            }
+          }, {
+            pName: 'AMap.MapType',
+            defaultType: 0,
+            events: {
+              init (instance) {
+                console.log(instance)
+              }
+            }
+          }
+        ],
         events: {
           click (e) {
             let {lng, lat} = e.lnglat
@@ -123,6 +162,10 @@
               }
             })
           }
+        },
+        searchOption: {
+          city: '秦皇岛',
+          citylimit: true
         }
       }
     },
@@ -148,7 +191,12 @@
         let window = {
           position: [lng, lat],
           visible: true,
-          content: 'hello'
+          content: 'hello',
+          event: {
+            click (e) {
+              e.target.visible = true
+            }
+          }
         }
         this.markers.push(marker)
         this.windows.push(window)
@@ -156,6 +204,23 @@
       removeMarker () {
         if (!this.markers.length) return
         this.markers.splice(this.markers.length - 1, 1)
+      },
+      onSearchResult (pois) {
+        let latSum = 0
+        let lngSum = 0
+        if (pois.length > 0) {
+          pois.forEach(poi => {
+            let {lng, lat} = poi
+            lngSum += lng
+            latSum += lat
+            this.markers.push({position: [poi.lng, poi.lat]})
+          })
+          let center = {
+            lng: lngSum / pois.length,
+            lat: latSum / pois.length
+          }
+          this.center = [center.lng, center.lat]
+        }
       }
     }
   }
@@ -164,6 +229,12 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .amap-wrapper {
+    position relative
+    .amap-search-box {
+      position absolute
+      top 25px
+      left 100px
+    }
     .amap-demo {
       height 500px
       border 1px #333 solid
