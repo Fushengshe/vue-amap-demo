@@ -17,6 +17,12 @@
           :visible="marker.visible"
           :draggable="marker.draggable"
         ></el-amap-marker>
+        <el-amap-info-window
+          v-for="(window, index) in windows"
+          :position="window.position"
+          :visible="window.visible"
+          :content="window.content"
+        ></el-amap-info-window>
       </el-amap>
       <div class="toolbar">
         <el-button
@@ -58,19 +64,21 @@
   import VueAMap from 'vue-amap'
   let amapManager = new VueAMap.AMapManager()
   export default {
+
     name: 'amap-page',
     data () {
       let self = this
       return {
         msg: 'vue-amap say hello',
         amapManager,
-        zoom: 12,
+        zoom: 14,
         lat: '',
         lng: '',
-        center: [121.5273285, 31.21515044],
+//        center: [121.5273285, 31.21515044],
+        center: [119.547204, 39.919205],
         markers: [
           {
-            position: [121.5273285, 31.21515044],
+            position: [119.547204, 39.919205],
             events: {
               click: () => {
                 alert('your click me')
@@ -83,6 +91,13 @@
             },
             visible: true,
             draggable: false
+          }
+        ],
+        windows: [
+          {
+            position: [119.547204, 39.919205],
+            visible: true,
+            content: 'hello'
           }
         ],
         address: '',
@@ -125,10 +140,18 @@
         this.markers[0].visible = !visibleVar
       },
       addMarker () {
+        let lng = 119.547204 + (Math.random() - 0.5) * 0.02
+        let lat = 39.919205 + (Math.random() - 0.5) * 0.02
         let marker = {
-          position: [121.5273285 + (Math.random() - 0.5) * 0.02, 31.21515044 + (Math.random() - 0.5) * 0.02]
+          position: [lng, lat]
+        }
+        let window = {
+          position: [lng, lat],
+          visible: true,
+          content: 'hello'
         }
         this.markers.push(marker)
+        this.windows.push(window)
       },
       removeMarker () {
         if (!this.markers.length) return
