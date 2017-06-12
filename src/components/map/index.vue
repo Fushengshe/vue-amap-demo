@@ -60,6 +60,10 @@
           @click="removeMarker">
           remove marker
         </el-button>
+        <el-button
+          class="gotoAmap"
+          @click=""
+        ></el-button>
       </div>
       <div class="geocoder-bar">
         position: [{{lng}},{{lat}}] address: {{address}}
@@ -71,8 +75,10 @@
 <script type="text/ecmascript-6">
   /* eslint-disable no-duplicate-imports */
   import VueAMap from 'vue-amap'
+  import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   let amapManager = new VueAMap.AMapManager()
   export default {
+    components: {ElButton},
     name: 'amap-page',
     data () {
       let self = this
@@ -116,21 +122,24 @@
                 console.log(instance)
               }
             }
-          }, {
+          },
+          {
             pName: 'AMap.Scale',
             events: {
               init (instance) {
                 console.log(instance)
               }
             }
-          }, {
+          },
+          {
             pName: 'AMap.ToolBar',
             events: {
               init (instance) {
                 console.log(instance)
               }
             }
-          }, {
+          },
+          {
             pName: 'AMap.MapType',
             defaultType: 0,
             events: {
@@ -138,6 +147,9 @@
                 console.log(instance)
               }
             }
+          },
+          {
+            pName: 'AMap.Driving'
           }
         ],
         events: {
@@ -159,16 +171,22 @@
                 }
               }
             })
-            AMap.service(['AMap.Walking'], function () {
-              let MWalk = new AMap.Walking({
-                map: self.map,
-                panel: 'panel'
-              })
-              MWalk.search([
-                {keyword: '河北省秦皇岛市海港区白塔岭街道文体西路'},
-                {keyword: '河北省秦皇岛市海港区文化路街道河北大街中段鑫园广场'}
-              ], function (status, result) {})
+            let driving = new AMap.Driving({
+              policy: AMap.DrivingPolicy.LEAST_TIME,
+              map: self.amapManager.getMap()
             })
+            console.log(driving)
+            driving.search(
+              [{keyword: '秦皇岛站'}, {keyword: '东北大学秦皇岛分校'}],
+              function (status, result) {
+                button.onclick = function () {
+                  driving.searchOnAMAP({
+                    origin: result.origin,
+                    destination: result.destination
+                  })
+                }
+              }
+              )
           }
         },
         searchOption: {
