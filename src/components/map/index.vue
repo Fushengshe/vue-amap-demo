@@ -10,7 +10,7 @@ export default {
   mounted () {
     lazyAMapApiLoaderInstance.load().then(() => {
       /* eslint-disable no-undef */
-      this.map = new AMap.Map(
+      let map = new AMap.Map(
         'amap-cointainer',
         {
           resizeEnable: true,
@@ -18,10 +18,13 @@ export default {
           zoom: 13 // 地图显示的缩放级别
         })
       let walking = new AMap.Walking({
-        map: this.map,
+        map: map,
         panel: 'panel'
       })
-      walking.search([116.399028, 39.845042], [116.436281, 39.880719])
+      console.log(walking)
+      this.$nextTick(() => {
+        walking.search([116.399028, 39.845042], [116.436281, 39.880719])
+      })
     })
   }
 }

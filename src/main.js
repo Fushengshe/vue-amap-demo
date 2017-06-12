@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import { Button, Select, Message } from 'element-ui'
-import AMap from 'vue-amap'
+import AMap, { lazyAMapApiLoaderInstance } from 'vue-amap'
 Vue.config.productionTip = false
 Vue.use(AMap)
 Vue.use(Button)
@@ -21,10 +21,16 @@ AMap.initAMapApiLoader({
     'AMap.MapType',
     'AMap.PolyEditor',
     'AMap.CircleEditor',
+    'AMap.Walking',
     'AMap.Geocoder'
   ]
 })
-
+lazyAMapApiLoaderInstance.load().then(() => {
+  // your code ...
+  this.map = new AMap.Map('amapContainer', {
+    center: new AMap.LngLat(121.59996, 31.197646)
+  })
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
