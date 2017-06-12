@@ -152,14 +152,15 @@
               extensions: 'all'
             })
             geocoder.getAddress([lng, lat], function (status, result) {
-              console.log(status)
-              console.log(result)
               if (status === 'complete' && result.info === 'OK') {
                 if (result && result.regeocode) {
                   self.address = result.regeocode.formattedAddress
                   self.$nextTick()
                 }
               }
+            })
+            let transfer = new AMap.Transfer({
+
             })
           }
         },
@@ -234,6 +235,7 @@
       position absolute
       top 25px
       left 100px
+      color #4db3ff
     }
     .amap-demo {
       height 500px
