@@ -159,9 +159,11 @@
                 }
               }
             })
-            let transfer = new AMap.Transfer({
-
+            let walking = new AMap.Walking({
+              map: self,
+              panel: 'panel'
             })
+            walking.search([119.554757, 39.923222], [119.602736, 39.929738])
           }
         },
         searchOption: {

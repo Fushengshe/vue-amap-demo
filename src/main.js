@@ -21,6 +21,7 @@ AMap.initAMapApiLoader({
     'AMap.MapType',
     'AMap.PolyEditor',
     'AMap.CircleEditor',
+    'AMap.Walking',
     'AMap.Geocoder'
   ]
 })
