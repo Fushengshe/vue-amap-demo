@@ -159,11 +159,16 @@
                 }
               }
             })
-            let walking = new AMap.Walking({
-              map: self,
-              panel: 'panel'
+            AMap.service(['AMap.Walking'], function () {
+              let MWalk = new AMap.Walking({
+                map: self.map,
+                panel: 'panel'
+              })
+              MWalk.search([
+                {keyword: '河北省秦皇岛市海港区白塔岭街道文体西路'},
+                {keyword: '河北省秦皇岛市海港区文化路街道河北大街中段鑫园广场'}
+              ], function (status, result) {})
             })
-            walking.search([119.554757, 39.923222], [119.602736, 39.929738])
           }
         },
         searchOption: {
