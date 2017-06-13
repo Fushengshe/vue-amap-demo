@@ -24,14 +24,14 @@
           :visible="marker.visible"
           :draggable="marker.draggable"
         ></el-amap-marker>
-        <el-amap-info-window
-          v-for="(window, index) in windows"
-          :index="index"
-          :position="window.position"
-          :visible="window.visible"
-          :content="window.content"
-          :events="window.events"
-        ></el-amap-info-window>
+        <!--<el-amap-info-window-->
+          <!--v-for="(window, index) in windows"-->
+          <!--:index="index"-->
+          <!--:position="window.position"-->
+          <!--:visible="window.visible"-->
+          <!--:content="window.content"-->
+          <!--:events="window.events"-->
+        <!--&gt;</el-amap-info-window>-->
       </el-amap>
       <div class="toolbar">
         <el-button
@@ -62,8 +62,9 @@
         </el-button>
         <el-button
           class="gotoAmap"
-          @click=""
-        ></el-button>
+          @click="searchOnAMap"
+        >searchOnAMap
+        </el-button>
       </div>
       <div class="geocoder-bar">
         position: [{{lng}},{{lat}}] address: {{address}}
@@ -75,10 +76,9 @@
 <script type="text/ecmascript-6">
   /* eslint-disable no-duplicate-imports */
   import VueAMap from 'vue-amap'
-  import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
   let amapManager = new VueAMap.AMapManager()
+  import { Message } from 'element-ui'
   export default {
-    components: {ElButton},
     name: 'amap-page',
     data () {
       let self = this
@@ -106,13 +106,13 @@
             draggable: false
           }
         ],
-        windows: [
-          {
-            position: [119.547204, 39.919205],
-            visible: true,
-            content: 'hello'
-          }
-        ],
+//        windows: [
+//          {
+//            position: [119.547204, 39.919205],
+//            visible: true,
+//            content: 'hello'
+//          }
+//        ],
         address: '',
         plugins: [
           {
@@ -168,6 +168,7 @@
                 if (result && result.regeocode) {
                   self.address = result.regeocode.formattedAddress
                   self.$nextTick()
+                  Message.success('位置成功确认')
                 }
               }
             })
@@ -175,16 +176,12 @@
               policy: AMap.DrivingPolicy.LEAST_TIME,
               map: self.amapManager.getMap()
             })
-            console.log(driving)
+            self.driving = driving
             driving.search(
               [{keyword: '秦皇岛站'}, {keyword: '东北大学秦皇岛分校'}],
               function (status, result) {
-                button.onclick = function () {
-                  driving.searchOnAMAP({
-                    origin: result.origin,
-                    destination: result.destination
-                  })
-                }
+                self.result = result
+                Message.success('路径规划成功')
               }
             )
           }
@@ -192,10 +189,21 @@
         searchOption: {
           city: '秦皇岛',
           citylimit: true
-        }
+        },
+        result: []
       }
     },
     methods: {
+      searchOnAMap () {
+        if (!this.driving) {
+          Message.info('请先规划路径')
+        } else {
+          this.driving.searchOnAMAP({
+            origin: this.result.origin,
+            destination: this.result.destination
+          })
+        }
+      },
       changePosition () {
         let position = this.markers[0].position
         this.markers[0].position = [position[0] + 0.002, position[1] - 0.002]
