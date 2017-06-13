@@ -89,6 +89,8 @@
         lat: '',
         lng: '',
         center: [119.547204, 39.919205],
+        // 用来解决多次显示message的问题
+        drivingFlag: false,
         markers: [
           {
             position: [119.547204, 39.919205],
@@ -168,7 +170,7 @@
                 if (result && result.regeocode) {
                   self.address = result.regeocode.formattedAddress
                   self.$nextTick()
-                  Message.success('位置成功确认')
+//                  Message.success('位置成功确认')
                 }
               }
             })
@@ -181,7 +183,10 @@
               [{keyword: '秦皇岛站'}, {keyword: '东北大学秦皇岛分校'}],
               function (status, result) {
                 self.result = result
-                Message.success('路径规划成功')
+                if (!self.drivingFlag) {
+                  Message.success('路径规划成功')
+                }
+                self.drivingFlag = true
               }
             )
           }
